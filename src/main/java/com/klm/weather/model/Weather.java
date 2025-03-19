@@ -1,9 +1,6 @@
 package com.klm.weather.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.Date;
 import java.util.List;
@@ -15,6 +12,7 @@ public class Weather {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @Temporal(TemporalType.DATE)
     private Date date;
 
     private Float lat;
