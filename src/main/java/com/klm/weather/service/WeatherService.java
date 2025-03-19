@@ -6,29 +6,34 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class WeatherService {
     private final WeatherRepository weatherRepository;
 
-    public Weather addWeather(@RequestBody Weather weather) {
+    private static final String COLUMN_ID = "id";
+    private static final String COLUMN_DATE = "date";
+
+    public Weather addWeather(Weather weather) {
         return weatherRepository.save(weather);
     }
 
-    public Optional<Weather> getWeatherById(@PathVariable(value = "id") int id) {
+    public Optional<Weather> getWeatherById(int id) {
         return weatherRepository.findById(id);
     }
 
     public List<Weather> getWeathers(Map<String, String> paramsMap) throws ParseException {
         if (paramsMap == null || paramsMap.isEmpty())
-            return fetchSortedWeathers(Direction.ASC, "id");
+            return fetchSortedWeathers(Direction.ASC, COLUMN_ID);
         else return getWeathersByLookUpParam(paramsMap);
     }
 
@@ -49,9 +54,9 @@ public class WeatherService {
         }
         if (sort != null) {
             if (sort.equals("date")) {
-                return fetchSortedWeathers(Direction.ASC, "date");
+                return fetchSortedWeathers(Direction.ASC, COLUMN_DATE);
             } else if (sort.equals("-date")) {
-                return fetchSortedWeathers(Direction.DESC, "date");
+                return fetchSortedWeathers(Direction.DESC, COLUMN_DATE);
             }
         }
         return null;

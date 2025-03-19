@@ -32,8 +32,9 @@ public class WeatherApiRestController {
     }
 
     @GetMapping
-    public List<Weather> getWeathers(@RequestParam Map<String, String> paramsMap) throws ParseException {
-        return weatherService.getWeathers(paramsMap);
+    public ResponseEntity<List<Weather>> getWeathers(@RequestParam Map<String, String> paramsMap) throws ParseException {
+        List<Weather> records = weatherService.getWeathers(paramsMap);
+        return new ResponseEntity<>(records, HttpStatus.OK);
     }
 
 }
