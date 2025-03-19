@@ -3,6 +3,7 @@ package com.klm.weather.service;
 import com.klm.weather.model.Weather;
 import com.klm.weather.repository.WeatherRepository;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,13 +30,14 @@ public class WeatherService {
 
     public List<Weather> getWeathers(Map<String, String> paramsMap) throws ParseException {
         if (paramsMap == null || paramsMap.isEmpty())
-            return weatherRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+            return fetchSortedWeathers(Direction.ASC, "id");
         else return getWeathersByLookUpParam(paramsMap);
     }
 
     private List<Weather> getWeathersByLookUpParam(Map<String, String> paramsMap) throws ParseException {
         String dateInput = paramsMap.get("date");
         String city = paramsMap.get("city");
+        String sort = paramsMap.get("sort");
 
         if (dateInput != null) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -47,6 +49,17 @@ public class WeatherService {
             List<String> citiesLowerCase = cities.stream().map(String::toLowerCase).toList();
             return weatherRepository.fetchWeatherByCities(citiesLowerCase);
         }
+        if (sort != null) {
+            if (sort.equals("date")) {
+                return fetchSortedWeathers(Direction.ASC, "date");
+            } else if (sort.equals("-date")) {
+                return fetchSortedWeathers(Direction.DESC, "date");
+            }
+        }
         return null;
+    }
+
+    private List<Weather> fetchSortedWeathers(Direction direction, String column) {
+        return weatherRepository.findAll(Sort.by(direction, column));
     }
 }
