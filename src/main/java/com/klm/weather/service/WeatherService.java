@@ -2,6 +2,7 @@ package com.klm.weather.service;
 
 import com.klm.weather.model.Weather;
 import com.klm.weather.repository.WeatherRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
@@ -13,12 +14,9 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class WeatherService {
     private final WeatherRepository weatherRepository;
-
-    public WeatherService(WeatherRepository weatherRepository) {
-        this.weatherRepository = weatherRepository;
-    }
 
     public Weather addWeather(@RequestBody Weather weather) {
         return weatherRepository.save(weather);

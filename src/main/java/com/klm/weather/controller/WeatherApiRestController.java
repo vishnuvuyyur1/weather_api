@@ -2,6 +2,7 @@ package com.klm.weather.controller;
 
 import com.klm.weather.model.Weather;
 import com.klm.weather.service.WeatherService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,13 +14,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/weather")
+@RequiredArgsConstructor
 public class WeatherApiRestController {
 
     private final WeatherService weatherService;
-
-    public WeatherApiRestController(WeatherService weatherService) {
-        this.weatherService = weatherService;
-    }
 
     @PostMapping
     public ResponseEntity<Weather> addWeather(@RequestBody Weather weather) {
