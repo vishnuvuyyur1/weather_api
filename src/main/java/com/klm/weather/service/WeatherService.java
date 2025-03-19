@@ -9,10 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class WeatherService {
@@ -38,10 +35,17 @@ public class WeatherService {
 
     private List<Weather> getWeathersByLookUpParam(Map<String, String> paramsMap) throws ParseException {
         String dateInput = paramsMap.get("date");
+        String city = paramsMap.get("city");
+
         if (dateInput != null) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date date = simpleDateFormat.parse(dateInput);
             return weatherRepository.findByDate(date);
+        }
+        if (city != null) {
+            List<String> cities = Arrays.asList(city.split(","));
+            List<String> citiesLowerCase = cities.stream().map(String::toLowerCase).toList();
+            return weatherRepository.fetchWeatherByCities(citiesLowerCase);
         }
         return null;
     }
